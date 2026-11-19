@@ -17,7 +17,6 @@
 <meta property="og:image:alt" content="La liste de Noël de Paul">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="theme-color" content="#1e4d3a">
-<!-- deploy-auto: 2026-11-19 -->
 <link rel="preconnect" href="https://docs.google.com" crossorigin>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Ctext y=%22.9em%22 font-size=%2290%22%3E🎁%3C/text%3E%3C/svg%3E">
 <style>
@@ -185,10 +184,18 @@
     background: #fff; font-size: 1.3rem; line-height: 1; cursor: pointer; color: var(--ink); z-index: 1; }
   .modal-box.done .modal-img img { filter: grayscale(1); opacity: .7; }
   @media (max-width: 680px) {
-    .modal-box { grid-template-columns: 1fr; }
-    .modal-img { min-height: 0; padding: 20px; }
-    .modal-img img { max-height: 45vh; }
-    .modal-body { border-left: 0; border-top: 1px solid var(--line); }
+    .modal { padding: 12px; align-items: center; }
+    .modal-box { grid-template-columns: 1fr; border-radius: 16px;
+      max-height: calc(100vh - 24px); max-height: calc(100dvh - 24px); }
+    .modal-img { min-height: 0; height: 30vh; height: 30dvh; padding: 14px 44px; font-size: 4rem; }
+    .modal-img img { max-height: 100%; max-width: 100%; }
+    .modal-body { border-left: 0; border-top: 1px solid var(--line); padding: 16px 18px 20px; gap: 8px; }
+    .modal-body h2 { font-size: 1.15rem; }
+    .modal-body .desc { font-size: .92rem; line-height: 1.45; }
+    .modal-body .price { font-size: 1.1rem; }
+    .modal-body .links { flex-wrap: wrap; }
+    .modal-body .links .btn { flex: 1 1 auto; text-align: center; }
+    .modal-close { top: 8px; right: 8px; width: 32px; height: 32px; font-size: 1.15rem; }
   }
   .empty { text-align: center; color: var(--muted); padding: 40px 0; }
   footer { text-align: center; color: var(--muted); font-size: .85rem; padding: 0 20px 40px; }
