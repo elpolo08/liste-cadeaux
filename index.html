@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Paul - Liste de cadeaux</title>
+<meta name="description" content="Quelques idées de cadeaux pour Noël.">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="fr_FR">
+<meta property="og:url" content="https://kdo.paul.qd.je/">
+<meta property="og:title" content="La liste de Noël de Paul">
+<meta property="og:description" content="Quelques idées pour vous aider cette année 🎁">
+<meta property="og:image" content="https://kdo.paul.qd.je/apercu.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="La liste de Noël de Paul">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#1e4d3a">
+<link rel="preconnect" href="https://docs.google.com" crossorigin>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Ctext y=%22.9em%22 font-size=%2290%22%3E🎁%3C/text%3E%3C/svg%3E">
+<style>
+  :root {
+    --bg: #f7f3ec;
+    --card: #ffffff;
+    --ink: #1f2a24;
+    --muted: #6b7570;
+    --green: #1e4d3a;
+    --red: #b3342b;
+    --gold: #c9a24a;
+    --line: #e6dfd2;
+    --radius: 14px;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    line-height: 1.5;
+  }
+  header {
+    background: var(--green);
+    color: #fff;
+    text-align: center;
+    padding: 56px 20px 72px;
+    position: relative;
+    overflow: hidden;
+  }
+  header::after {
+    content: "";
+    position: absolute; left: 0; right: 0; bottom: -1px; height: 28px;
+    background: var(--bg);
+    border-radius: 50% 50% 0 0 / 100% 100% 0 0;
+  }
+  .flakes { position: absolute; inset: 0; pointer-events: none; opacity: .35; }
+  h1 {
+    font-family: Georgia, "Times New Roman", serif;
+    font-weight: 400;
+    font-size: clamp(2rem, 6vw, 3.2rem);
+    margin: 0 0 8px;
+    letter-spacing: .5px;
+  }
+  h1 span { color: var(--gold); }
+  .intro { max-width: 560px; margin: 0 auto; opacity: .9; }
+  main { max-width: 1080px; margin: 0 auto; padding: 8px 20px 60px; }
+
+  .note {
+    background: #fff8e6;
+    border: 1px solid #f0e0b0;
+    border-radius: var(--radius);
+    padding: 14px 18px;
+    margin: 0 0 24px;
+    font-size: .95rem;
+  }
+
+  .toolbar {
+    display: grid; grid-template-columns: 1fr auto; gap: 10px 16px; align-items: center;
+    grid-template-areas: "cats sort" "budgets budgets";
+    margin-bottom: 22px;
+  }
+  #chips { grid-area: cats; }
+  #budgets { grid-area: budgets; }
+  #sort { grid-area: sort; }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; }
+  .chip {
+    border: 1px solid var(--line);
+    background: var(--card);
+    color: var(--ink);
+    padding: 7px 14px;
+    border-radius: 999px;
+    font-size: .9rem;
+    cursor: pointer;
+  }
+  .budgets { margin: 0; }
+  .budgets .chip { font-size: .85rem; padding: 6px 13px; }
+  .budgets .chip.active { background: var(--gold); border-color: var(--gold); color: #fff; }
+  .chip.active { background: var(--green); border-color: var(--green); color: #fff; }
+  select {
+    -webkit-appearance: none;
+    appearance: none;
+    border: 1px solid var(--line);
+    background: var(--card) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5l5 5 5-5' fill='none' stroke='%231f2a24' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") no-repeat right 14px center;
+    cursor: pointer;
+    padding: 8px 40px 8px 14px;
+    border-radius: 10px;
+    font-size: .9rem;
+    color: var(--ink);
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    grid-auto-rows: 1fr;
+    gap: 18px;
+  }
+  .card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    overflow: hidden;
+    display: flex; flex-direction: column;
+    transition: transform .15s ease, box-shadow .15s ease;
+  }
+  .card:hover { transform: translateY(-2px); box-shadow: 0 10px 24px rgba(30,77,58,.08); }
+  .thumb {
+    height: 240px;
+    flex: 0 0 240px;
+    position: relative;
+    overflow: hidden;
+    background: #efe9df center / contain no-repeat;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 3rem;
+  }
+  .thumb.photo { background: #fff; }
+  .thumb.photo img { position: absolute; inset: 14px; width: calc(100% - 28px); height: calc(100% - 28px); object-fit: contain; display: block; }
+  .body { padding: 16px 18px 18px; display: flex; flex-direction: column; gap: 8px; flex: 1; }
+  .top { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+  .cat { font-size: .75rem; text-transform: uppercase; letter-spacing: .8px; color: var(--muted); }
+  .prio { font-size: .75rem; padding: 3px 9px; border-radius: 999px; font-weight: 600; white-space: nowrap; }
+  .prio-1 { background: #fbe4e2; color: var(--red); }
+  .prio-2 { background: #fbf1d9; color: #8a6a1c; }
+  .prio-3 { background: #e6efe9; color: var(--green); }
+  .card h2 { cursor: zoom-in; font-size: 1.1rem; margin: 0; font-weight: 650; line-height: 1.35;
+    display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; min-height: 2.7em; }
+  .desc { color: var(--muted); font-size: .92rem; margin: 0; flex: 1;
+    display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+  .spacer { flex: 1; }
+  .bottom { display: flex; justify-content: space-between; align-items: center; margin-top: 6px; }
+  .price { font-weight: 700; color: var(--green); }
+  .btn {
+    display: inline-block;
+    background: var(--red);
+    color: #fff;
+    text-decoration: none;
+    padding: 8px 14px;
+    border-radius: 10px;
+    font-size: .88rem;
+    font-weight: 600;
+  }
+  .btn:hover { background: #962a22; }
+  .links { display: flex; gap: 6px; flex-wrap: wrap; justify-content: flex-end; }
+  .card.done { opacity: .55; }
+  .card.done:hover { transform: none; box-shadow: none; }
+  .card.done .thumb.photo img { filter: grayscale(1); }
+  .done-badge { font-size: .75rem; padding: 3px 9px; border-radius: 999px; font-weight: 600; white-space: nowrap; background: #e6efe9; color: var(--green); }
+  .mention { font-size: .85rem; font-style: italic; color: var(--muted); text-align: right; max-width: 60%; }
+  .thumb { cursor: zoom-in; }
+  .modal { position: fixed; inset: 0; z-index: 50; display: none; align-items: center; justify-content: center;
+    background: rgba(20, 28, 24, .55); padding: 20px; backdrop-filter: blur(3px); -webkit-backdrop-filter: blur(3px); }
+  .modal.open { display: flex; animation: fade .15s ease; }
+  @keyframes fade { from { opacity: 0; } to { opacity: 1; } }
+  .modal-box { background: var(--card); border-radius: 18px; width: min(860px, 100%); max-height: calc(100vh - 40px);
+    overflow: auto; display: grid; grid-template-columns: 1.1fr 1fr; position: relative; box-shadow: 0 20px 60px rgba(0,0,0,.25); }
+  .modal-img { background: #fff; display: flex; align-items: center; justify-content: center; min-height: 360px; padding: 24px; font-size: 6rem; }
+  .modal-img img { max-width: 100%; max-height: 70vh; object-fit: contain; display: block; }
+  .modal-body { padding: 28px 26px; display: flex; flex-direction: column; gap: 12px; border-left: 1px solid var(--line); }
+  .modal-body h2 { margin: 0; font-size: 1.45rem; line-height: 1.3; }
+  .modal-body .desc { flex: none; display: block; overflow: visible; -webkit-line-clamp: unset; font-size: 1rem; line-height: 1.55; }
+  .modal-body .price { font-size: 1.3rem; }
+  .modal-body .links { justify-content: flex-start; }
+  .modal-body .mention { text-align: left; max-width: none; }
+  .modal-close { position: absolute; top: 10px; right: 10px; width: 36px; height: 36px; border-radius: 50%; border: 1px solid var(--line);
+    background: #fff; font-size: 1.3rem; line-height: 1; cursor: pointer; color: var(--ink); z-index: 1; }
+  .modal-box.done .modal-img img { filter: grayscale(1); opacity: .7; }
+  @media (max-width: 680px) {
+    .modal-box { grid-template-columns: 1fr; }
+    .modal-img { min-height: 0; padding: 20px; }
+    .modal-img img { max-height: 45vh; }
+    .modal-body { border-left: 0; border-top: 1px solid var(--line); }
+  }
+  .empty { text-align: center; color: var(--muted); padding: 40px 0; }
+  footer { text-align: center; color: var(--muted); font-size: .85rem; padding: 0 20px 40px; }
+
+  /* ---------- Téléphone ---------- */
+  @media (max-width: 640px) {
+    header { padding: 34px 18px 50px; }
+    h1 { font-size: 1.85rem; margin-bottom: 6px; }
+    .intro { font-size: .9rem; line-height: 1.45; }
+    header::after { height: 18px; }
+    main { padding: 4px 12px 40px; }
+    .note { font-size: .85rem; padding: 10px 14px; margin-bottom: 14px; border-radius: 12px; }
+
+    .toolbar { grid-template-columns: 1fr; grid-template-areas: "cats" "budgets" "sort"; gap: 8px; margin-bottom: 14px; }
+    .chips { flex-wrap: nowrap; overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none;
+      margin: 0 -12px; padding: 2px 12px; }
+    .chips::-webkit-scrollbar { display: none; }
+    .chip { flex: 0 0 auto; padding: 6px 13px; font-size: .85rem; }
+    .budgets .chip { font-size: .8rem; padding: 5px 11px; }
+    #sort { justify-self: end; font-size: .82rem; padding: 6px 34px 6px 12px; background-position: right 12px center; }
+
+    .grid { grid-template-columns: 1fr 1fr; gap: 10px; }
+    .thumb { height: 150px; flex-basis: 150px; font-size: 2.4rem; }
+    .thumb.photo img { inset: 10px; width: calc(100% - 20px); height: calc(100% - 20px); }
+    .card { border-radius: 12px; }
+    .card:hover { transform: none; box-shadow: none; }
+    .body { padding: 10px 11px 12px; gap: 5px; }
+    .cat { font-size: .64rem; letter-spacing: .5px; }
+    .done-badge, .prio { font-size: .62rem; padding: 2px 7px; }
+    .top { flex-wrap: wrap; gap: 4px; }
+    .card h2 { font-size: .9rem; line-height: 1.3; min-height: 2.6em; }
+    .bottom { flex-direction: column; align-items: stretch; gap: 7px; margin-top: 4px; }
+    .price { font-size: .9rem; }
+    .links { justify-content: stretch; gap: 5px; flex-wrap: wrap; }
+    .links .btn { flex: 1 1 auto; text-align: center; padding: 7px 8px; font-size: .78rem; white-space: nowrap; }
+    .mention { font-size: .74rem; text-align: left; max-width: none; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <svg class="flakes" viewBox="0 0 400 200" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+    <g fill="#fff">
+      <circle cx="20" cy="30" r="2"/><circle cx="70" cy="120" r="1.5"/><circle cx="110" cy="50" r="2.5"/>
+      <circle cx="160" cy="160" r="1.5"/><circle cx="210" cy="25" r="2"/><circle cx="250" cy="110" r="1.2"/>
+      <circle cx="300" cy="60" r="2.2"/><circle cx="340" cy="150" r="1.6"/><circle cx="380" cy="35" r="2"/>
+      <circle cx="140" cy="95" r="1.2"/><circle cx="270" cy="175" r="1.8"/><circle cx="45" cy="175" r="1.4"/>
+    </g>
+  </svg>
+  <!-- ✏️ Titre et petit mot d'intro -->
+  <h1>La liste de Noël de <span>Paul</span></h1>
+  <p class="intro">Quelques idées pour vous aider cette année. Rien d'obligatoire, évidemment : le plus beau cadeau reste de passer Noël ensemble.</p>
+</header>
+
+<main>
+  <!-- ✏️ Petit message pratique (supprime ce bloc si tu n'en veux pas) -->
+  <div class="note">
+    🎁 Pour éviter les doublons, dites dans le groupe de la famille ce que vous prenez.
+  </div>
+
+  <div class="toolbar">
+    <div class="chips" id="chips"></div>
+    <div class="chips budgets" id="budgets"></div>
+    <select id="sort" aria-label="Trier">
+      <option value="prio">Trier : priorité</option>
+      <option value="asc">Prix croissant</option>
+      <option value="desc">Prix décroissant</option>
+    </select>
+  </div>
+
+  <div class="grid" id="grid"></div>
+</main>
+
+<div class="modal" id="modal" aria-hidden="true">
+  <div class="modal-box" id="modalBox" role="dialog" aria-modal="true"></div>
+</div>
+
+<footer>Joyeux Noël ✨</footer>
+
+<script>
+/* =====================================================================
+   ✏️  LES CADEAUX SE MODIFIENT DANS LE GOOGLE SHEET, pas ici.
+   La liste ci-dessous est une copie de secours, affichée seulement si
+   le tableau ne répond pas.
+   ===================================================================== */
+const cadeauxSecours = [
+  {
+    nom: "Sac Rains Hilo Weekend Bag - Gris",
+    categorie: "Mode",
+    description: "Coloris Dark Grey, sac de week-end imperméable",
+    prix: 79.9,
+    lien: "https://fr.rains.com/collections/travel-bags/products/weekend-bag?variant=50305177190640",
+    image: "https://cdn.shopify.com/s/files/1/0828/6178/5328/files/rains_hilo_weekend_bag_dark_grey_everyday_pack_1_33192295-8a8a-469b-b08f-0be1159e05e1.jpg?width=800",
+    emoji: "👜"
+  },
+  {
+    nom: "Apple Smart Folio pour iPad mini - Bleu marine",
+    categorie: "Tech",
+    description: "",
+    prix: 89,
+    liens: [
+      {
+        texte: "Amazon",
+        url: "https://www.amazon.fr/gp/product/B0HPBX8TRJ/ref=ox_sc_act_title_4?smid=A1X6FK5RDHNB96&th=1"
+      },
+      {
+        texte: "Apple Store",
+        url: "https://www.apple.com/fr/shop/product/mkr44zm/a/smart-folio-pour-ipad-mini-a20-pro-bleu-marine"
+      }
+    ],
+    image: "https://store.storeimages.cdn-apple.com/1/as-images.apple.com/is/MKR44?wid=800&hei=800&fmt=jpeg&qlt=90",
+    emoji: "📱"
+  },
+  {
+    nom: "PETIT service de couverts Tirvola - 16 pièces",
+    categorie: "Cuisine",
+    description: "Couleur marron bois marron, pour 4 personnes. Chez Sklum (+ frais de port)",
+    prix: 16.95,
+    lien: "https://www.sklum.com/fr/acheter-couverts/161340-couverts-en-acier-inoxydable-de-16-pieces-tirvola.html?id_c=360102",
+    image: "https://cdn.sklum.com/fr/3851582-large_default/couverts-en-acier-inoxydable-de-16-pieces-tirvola.jpg",
+    emoji: "🍴"
+  },
+  {
+    nom: "Ménagère Couzon Dunes - 24 pièces",
+    categorie: "Cuisine",
+    description: "Pour 6 personnes, inox 18/10 finition miroir",
+    prix: 89.99,
+    liens: [
+      {
+        texte: "La Redoute",
+        url: "https://www.laredoute.fr/ppdp/prod-549779105.aspx"
+      },
+      {
+        texte: "Amazon",
+        url: "https://www.amazon.fr/dp/B09NB7FPY6"
+      }
+    ],
+    image: "https://m.media-amazon.com/images/I/61AMu7o7hJL._AC_SL1500_.jpg",
+    emoji: "🍴"
+  },
+  {
+    nom: "Un plaid",
+    categorie: "Maison",
+    description: "Sympa pour aller avec le nouveau canapé",
+    prix: null,
+    lien: "",
+    image: "",
+    emoji: "🧶",
+    mention: "👉 Demandez à Camille"
+  },
+  {
+    nom: "Une expérience spa à deux",
+    categorie: "Sorties",
+    description: "Un moment de détente en duo",
+    prix: null,
+    lien: "",
+    image: "",
+    emoji: "🧖"
+  },
+  {
+    nom: "Lampe Mikona - INSPIRE",
+    categorie: "Maison",
+    description: "Coton beige, H 40 cm, culot E27 (Leroy Merlin)",
+    prix: 39.9,
+    lien: "https://www.leroymerlin.fr/produits/lampe-e27-mikona-coton-beige-h-40cm-inspire-85865334.html",
+    image: "https://media.adeo.com/media/3476041/media.png",
+    emoji: "🛋️"
+  },
+  {
+    nom: "Apple Pencil (USB-C) pour iPad",
+    categorie: "Tech",
+    description: "",
+    prix: 89,
+    liens: [
+      {
+        texte: "Amazon",
+        url: "https://www.amazon.fr/Apple-MUWA3ZM-A-Pencil-USB-C/dp/B0CL7DZXB2?ref_=ast_sto_dp&th=1"
+      },
+      {
+        texte: "Apple Store",
+        url: "https://www.apple.com/fr/shop/product/muwa3zm/a/apple-pencil-usb-c"
+      }
+    ],
+    image: "https://store.storeimages.cdn-apple.com/1/as-images.apple.com/is/MUWA3?wid=800&hei=800&fmt=jpeg&qlt=90",
+    emoji: "✏️"
+  },
+  {
+    nom: "Abat-jour Mariela - Kave Home",
+    categorie: "Maison",
+    description: "Pour plafonnier, lin finition beige, Ø 80 x 40 cm",
+    prix: 69.99,
+    lien: "https://kavehome.com/fr/fr/p/abat-jour-mariela-pour-plafonnier-en-lin-finition-beige-o-80-x-40-cm",
+    image: "https://d.media.kavehome.com/image/upload/v1765366310/products/L0600029FN12_1V01.jpg",
+    emoji: "💡"
+  },
+  {
+    nom: "Planche à découper IKEA FASCINERA",
+    categorie: "Cuisine",
+    description: "Acacia, 52 x 22 cm",
+    prix: 16.99,
+    lien: "https://www.ikea.com/fr/fr/p/fascinera-planche-a-decouper-acacia-40503363/",
+    image: "https://www.ikea.com/fr/fr/images/products/fascinera-planche-a-decouper-acacia__0956508_pe804692_s5.jpg",
+    emoji: "🔪"
+  },
+  {
+    nom: "La Dette sociale de la France : 1974-2024",
+    categorie: "Livres",
+    description: "Nicolas Dufourcq, Odile Jacob",
+    prix: 28.9,
+    mention: "Pas encore disponible en livre de poche",
+    image: "https://m.media-amazon.com/images/I/51yjjJB4tIL._SL1500_.jpg",
+    emoji: "📚"
+  },
+  {
+    nom: "Sonos Beam Ultra - Noir",
+    categorie: "Tech",
+    description: "",
+    prix: 699,
+    lien: "https://www.amazon.fr/dp/B0H8YSW9K1",
+    image: "https://m.media-amazon.com/images/I/71DaLZhq0iL._AC_SL1500_.jpg",
+    emoji: "🔊"
+  },
+  {
+    nom: "Sonos Era 100 SL - Blanc",
+    categorie: "Tech",
+    description: "",
+    prix: 199,
+    lien: "https://www.sonos.com/fr-fr/shop/era-100-sl",
+    image: "https://media.sonos.com/images/znqtjj88/production/eca508db3a68fc6269a79af9c36b6c3c2eabd2cc-2000x2000.png",
+    emoji: "🔈",
+    achete: true
+  },
+  {
+    nom: "Grille-pain Smeg noir",
+    categorie: "Cuisine",
+    description: "",
+    prix: 145,
+    lien: "https://www.boulanger.com/ref/1063231",
+    image: "https://boulanger.scene7.com/is/image/Boulanger/8017709187002_h_f_l_0?wid=800&hei=800",
+    emoji: "🍞"
+  },
+  {
+    nom: "Bougie IKEA TOFSTÄRNA - Feuille de figuier",
+    categorie: "Maison",
+    description: "",
+    prix: 8.99,
+    lien: "https://www.ikea.com/fr/fr/p/tofstaerna-bougie-parf-2-meches-ds-verre-feuille-de-figuier-brun-50627669/",
+    image: "https://www.ikea.com/fr/fr/images/products/tofstaerna-bougie-parf-2-meches-ds-verre-feuille-de-figuier-brun__1485700_pe1002119_s5.jpg",
+    emoji: "🕯️"
+  },
+  {
+    nom: "Vaisselier PANTONE - Baita Home",
+    categorie: "Maison",
+    description: "Verre cannelé et métal taupe, H 180 cm",
+    prix: 399.99,
+    lien: "https://www.baita-home.com/vaisselier/6649-product-3584179101937.html",
+    image: "https://m2.baita-home.com/66923-large_default/product.jpg",
+    emoji: "🗄️"
+  },
+  {
+    nom: "Verres IKEA VARDAGEN - 31 cl",
+    categorie: "Cuisine",
+    description: "Verre transparent, lot de 6",
+    prix: 6.99,
+    lien: "https://www.ikea.com/fr/fr/p/vardagen-verre-verre-transparent-00286917/",
+    image: "https://www.ikea.com/fr/fr/images/products/vardagen-verre-verre-transparent__0533549_pe648678_s5.jpg",
+    emoji: "🥛"
+  },
+  {
+    nom: "iPad mini (puce A20 Pro) - 512 Go",
+    categorie: "Tech",
+    description: "Noir (minuit), écran en verre nano-texturé",
+    prix: null,
+    lien: "",
+    image: "https://store.storeimages.cdn-apple.com/1/as-images.apple.com/is/ipad-mini-storage-select-202610-midnight?wid=1000&hei=1000&fmt=jpeg&qlt=90",
+    emoji: "📱",
+    achete: true
+  }
+];
+
+/* ===== Les cadeaux sont lus dans le Google Sheet ci-dessous. =====
+   La liste ci-dessus ne sert que de secours si le tableau est inaccessible. */
+const SHEET_CSV = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRk5Ajg2thmaBbDEmF85VaNkmD1ctpIqwwxuHwIrtFltHcM5zO-5n6m8JGBTLifnxtr03a5wzxHHZ0h/pub?gid=1763206360&single=true&output=csv";
+let cadeaux = [];
+
+function parseCSV(text) {
+  const rows = []; let row = [], cur = "", q = false;
+  for (let i = 0; i < text.length; i++) {
+    const ch = text[i];
+    if (q) {
+      if (ch === '"') { if (text[i + 1] === '"') { cur += '"'; i++; } else q = false; }
+      else cur += ch;
+    } else if (ch === '"') q = true;
+    else if (ch === ",") { row.push(cur); cur = ""; }
+    else if (ch === "\n" || ch === "\r") {
+      if (ch === "\r" && text[i + 1] === "\n") i++;
+      row.push(cur); rows.push(row); row = []; cur = "";
+    } else cur += ch;
+  }
+  if (cur !== "" || row.length) { row.push(cur); rows.push(row); }
+  return rows.filter(r => r.some(c => c.trim() !== ""));
+}
+
+function lignesVersCadeaux(rows) {
+  const head = rows[0].map(h => h.trim().toLowerCase());
+  const col = name => head.indexOf(name);
+  const get = (r, name) => { const i = col(name); return i < 0 ? "" : (r[i] || "").trim(); };
+  return rows.slice(1).map(r => {
+    const liens = [];
+    for (const n of [1, 2, 3]) {
+      const url = get(r, `lien${n}_url`);
+      if (url) liens.push({ texte: get(r, `lien${n}_texte`) || "Voir", url });
+    }
+    const p = get(r, "prix").replace(/\s|€/g, "").replace(",", ".");
+    const prix = p === "" || isNaN(Number(p)) ? null : Number(p);
+    const ordre = Number(get(r, "ordre").replace(",", "."));
+    return {
+      ordre: isNaN(ordre) ? 9999 : ordre,
+      nom: get(r, "nom"),
+      categorie: get(r, "categorie"),
+      description: get(r, "description"),
+      prix,
+      liens,
+      image: get(r, "image"),
+      emoji: get(r, "emoji"),
+      achete: /^(oui|yes|x|1|true|vrai)$/i.test(get(r, "deja_achete")),
+      mention: get(r, "mention"),
+      masque: /^(non|no|0|false|faux)$/i.test(get(r, "afficher"))
+    };
+  }).filter(c => c.nom && !c.masque).sort((a, b) => a.ordre - b.ordre);
+}
+
+const CLE_CACHE = "liste-cadeaux-v1";
+
+function lireCache() {
+  try { const t = localStorage.getItem(CLE_CACHE); return t ? JSON.parse(t) : null; } catch (e) { return null; }
+}
+function ecrireCache(liste) {
+  try { localStorage.setItem(CLE_CACHE, JSON.stringify(liste)); } catch (e) {}
+}
+
+async function chargerCadeaux() {
+  // 1. Affichage immédiat avec la dernière version connue (visites suivantes)
+  const cache = lireCache();
+  if (cache && cache.length) { cadeaux = cache; render(); }
+
+  // 2. Mise à jour depuis le Google Sheet en arrière-plan
+  try {
+    const r = await fetch(SHEET_CSV);
+    if (!r.ok) throw new Error(r.status);
+    const texte = await r.text();
+    const liste = lignesVersCadeaux(parseCSV(texte));
+    if (!liste.length) throw new Error("vide");
+    const nouveau = JSON.stringify(liste);
+    if (nouveau !== JSON.stringify(cadeaux)) { cadeaux = liste; render(); }
+    ecrireCache(liste);
+  } catch (e) {
+    console.warn("Google Sheet inaccessible", e);
+    if (!cadeaux.length) { cadeaux = cadeauxSecours; render(); }
+  }
+}
+/* =================== Fin de la partie à modifier =================== */
+
+const prioLabel = { 1: "J'en rêve", 2: "Ça me ferait plaisir", 3: "Petite idée" };
+let filtre = "Tout";
+let budget = "tous";
+const BUDGETS = [
+  { id: "tous", label: "Tous budgets", ok: () => true },
+  { id: "petit", label: "Moins de 30 €", ok: p => p < 30 },
+  { id: "moyen", label: "30 à 100 €", ok: p => p >= 30 && p <= 100 },
+  { id: "gros", label: "Plus de 100 €", ok: p => p > 100 }
+];
+const budgetsEl = document.getElementById("budgets");
+function dansBudget(c) {
+  if (budget === "tous") return true;
+  if (typeof c.prix !== "number" || c.achete) return false;
+  return BUDGETS.find(b => b.id === budget).ok(c.prix);
+}
+function renderBudgets() {
+  budgetsEl.innerHTML = BUDGETS.map(b =>
+    `<button class="chip ${b.id === budget ? "active" : ""}" data-b="${b.id}">${b.label}</button>`
+  ).join("");
+  budgetsEl.querySelectorAll(".chip").forEach(x => x.onclick = () => { budget = x.dataset.b; render(); });
+}
+
+const grid = document.getElementById("grid");
+const chips = document.getElementById("chips");
+const sortSel = document.getElementById("sort");
+
+function esc(s) {
+  return String(s ?? "").replace(/[&<>"']/g, c => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[c]));
+}
+
+function renderChips() {
+  const cats = ["Tout", ...new Set(cadeaux.map(c => c.categorie).filter(Boolean))];
+  chips.innerHTML = cats.map(c =>
+    `<button class="chip ${c === filtre ? "active" : ""}" data-cat="${esc(c)}">${esc(c)}</button>`
+  ).join("");
+  chips.querySelectorAll(".chip").forEach(b => b.onclick = () => { filtre = b.dataset.cat; render(); });
+}
+
+function render() {
+  renderChips();
+  renderBudgets();
+  let list = cadeaux.filter(c => (filtre === "Tout" || c.categorie === filtre) && dansBudget(c));
+  const s = sortSel.value;
+  const p = c => (typeof c.prix === "number" ? c.prix : Infinity);
+  if (s === "asc") list.sort((a, b) => p(a) - p(b));
+  else if (s === "desc") list.sort((a, b) => (p(b) === Infinity ? -1 : p(b)) - (p(a) === Infinity ? -1 : p(a)));
+  else list.sort((a, b) => (a.priorite || 3) - (b.priorite || 3));
+
+  list.sort((a, b) => (a.achete ? 1 : 0) - (b.achete ? 1 : 0));
+
+  if (!list.length) { grid.innerHTML = `<p class="empty">Aucun cadeau pour ce choix.</p>`; return; }
+
+  affichés = list;
+  grid.innerHTML = list.map((c, idx) => {
+    const prio = c.priorite;
+    const thumb = c.image
+      ? `<div class="thumb photo"><img src="${esc(c.image)}" alt="${esc(c.nom)}" loading="lazy" referrerpolicy="no-referrer" onerror="this.parentNode.textContent='${esc(c.emoji || "🎁")}';this.parentNode.classList.remove('photo')"></div>`
+      : `<div class="thumb">${esc(c.emoji || "🎁")}</div>`;
+    const prix = (typeof c.prix === "number" && !c.achete)
+      ? `<span class="price">≈ ${c.prix.toLocaleString("fr-FR", Number.isInteger(c.prix) ? {} : { minimumFractionDigits: 2, maximumFractionDigits: 2 })} €</span>`
+      : `<span></span>`;
+    const liens = Array.isArray(c.liens) ? c.liens : (c.lien ? [{ texte: "Voir", url: c.lien }] : []);
+    const lien = liens.length
+      ? `<div class="links">${liens.map(l => `<a class="btn" href="${esc(l.url)}" target="_blank" rel="noopener">${esc(l.texte || "Voir")}</a>`).join("")}</div>`
+      : "";
+    return `
+      <article class="card${c.achete ? " done" : ""}" data-idx="${idx}">
+        ${thumb}
+        <div class="body">
+          <div class="top">
+            <span class="cat">${esc(c.categorie)}</span>
+            ${c.achete ? `<span class="done-badge">✓ Déjà acheté</span>` : (prio ? `<span class="prio prio-${prio}">${prioLabel[prio]}</span>` : "")}
+          </div>
+          <h2>${esc(c.nom)}</h2>
+          <div class="spacer"></div>
+          <div class="bottom">${prix}${c.achete ? "" : (c.mention ? `<span class="mention">${esc(c.mention)}</span>` : lien)}</div>
+        </div>
+      </article>`;
+  }).join("");
+}
+
+let affichés = [];
+const modal = document.getElementById("modal");
+const modalBox = document.getElementById("modalBox");
+
+function prixTexte(c) {
+  if (typeof c.prix !== "number" || c.achete) return "";
+  return `≈ ${c.prix.toLocaleString("fr-FR", Number.isInteger(c.prix) ? {} : { minimumFractionDigits: 2, maximumFractionDigits: 2 })} €`;
+}
+
+function ouvrir(c) {
+  const liens = Array.isArray(c.liens) ? c.liens : (c.lien ? [{ texte: "Voir", url: c.lien }] : []);
+  const actions = c.achete ? `<span class="done-badge">✓ Déjà acheté</span>`
+    : c.mention ? `<span class="mention">${esc(c.mention)}</span>`
+    : liens.length ? `<div class="links">${liens.map(l => `<a class="btn" href="${esc(l.url)}" target="_blank" rel="noopener">${esc(l.texte || "Voir")}</a>`).join("")}</div>` : "";
+  const img = c.image
+    ? `<img src="${esc(c.image)}" alt="${esc(c.nom)}" referrerpolicy="no-referrer" onerror="this.parentNode.textContent='${esc(c.emoji || "🎁")}'">`
+    : esc(c.emoji || "🎁");
+  const p = prixTexte(c);
+  modalBox.className = "modal-box" + (c.achete ? " done" : "");
+  modalBox.innerHTML = `
+    <button class="modal-close" aria-label="Fermer">×</button>
+    <div class="modal-img">${img}</div>
+    <div class="modal-body">
+      <span class="cat">${esc(c.categorie)}</span>
+      <h2>${esc(c.nom)}</h2>
+      ${c.description ? `<p class="desc">${esc(c.description)}</p>` : ""}
+      ${p ? `<span class="price">${p}</span>` : ""}
+      ${actions}
+    </div>`;
+  modalBox.querySelector(".modal-close").onclick = fermer;
+  modal.classList.add("open");
+  modal.setAttribute("aria-hidden", "false");
+  document.body.style.overflow = "hidden";
+}
+
+function fermer() {
+  modal.classList.remove("open");
+  modal.setAttribute("aria-hidden", "true");
+  document.body.style.overflow = "";
+}
+
+grid.addEventListener("click", e => {
+  if (e.target.closest("a")) return;
+  const card = e.target.closest(".card");
+  if (!card || !e.target.closest(".thumb, h2")) return;
+  const c = affichés[Number(card.dataset.idx)];
+  if (c) ouvrir(c);
+});
+modal.addEventListener("click", e => { if (e.target === modal) fermer(); });
+document.addEventListener("keydown", e => { if (e.key === "Escape") fermer(); });
+
+sortSel.onchange = render;
+grid.innerHTML = `<p class="empty">Chargement de la liste…</p>`;
+chargerCadeaux();
+</script>
+</body>
+</html>
