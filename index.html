@@ -187,8 +187,9 @@
     .modal { padding: 12px; align-items: center; }
     .modal-box { grid-template-columns: 1fr; border-radius: 16px;
       max-height: calc(100vh - 24px); max-height: calc(100dvh - 24px); }
-    .modal-img { min-height: 0; height: 30vh; height: 30dvh; padding: 14px 44px; font-size: 4rem; }
-    .modal-img img { max-height: 100%; max-width: 100%; }
+    .modal-img { position: relative; overflow: hidden; min-height: 0; height: 30vh; height: 30dvh; padding: 0; font-size: 4rem; }
+    .modal-img img { position: absolute; top: 14px; bottom: 14px; left: 44px; right: 44px;
+      width: calc(100% - 88px); height: calc(100% - 28px); max-width: none; max-height: none; object-fit: contain; }
     .modal-body { border-left: 0; border-top: 1px solid var(--line); padding: 16px 18px 20px; gap: 8px; }
     .modal-body h2 { font-size: 1.15rem; }
     .modal-body .desc { font-size: .92rem; line-height: 1.45; }
