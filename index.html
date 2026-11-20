@@ -133,7 +133,13 @@
     font-size: 3rem;
   }
   .thumb.photo { background: #fff; }
-  .thumb.photo img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center; display: block; }
+  /* Photo entière au centre + même photo floutée en fond : pas de bandes vides, pas de zoom excessif */
+  .thumb.photo img { position: absolute; display: block; }
+  .thumb.photo img.fond { inset: -24px; width: calc(100% + 48px); height: calc(100% + 48px); object-fit: cover;
+    filter: blur(22px) saturate(1.15); opacity: .85; }
+  .thumb.photo img.net { inset: 0; width: 100%; height: 100%; object-fit: contain; }
+  .thumb.photo img.net.plein { object-fit: cover; }
+  .thumb.photo.plein img.fond { display: none; }
   .body { padding: 16px 18px 18px; display: flex; flex-direction: column; gap: 8px; flex: 1; }
   .top { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
   .cat { font-size: .75rem; text-transform: uppercase; letter-spacing: .8px; color: var(--muted); }
@@ -162,7 +168,8 @@
   .links { display: flex; gap: 6px; flex-wrap: wrap; justify-content: flex-end; }
   .card.done { opacity: .55; }
   .card.done:hover { transform: none; box-shadow: none; }
-  .card.done .thumb.photo img { filter: grayscale(1); }
+  .card.done .thumb.photo img.net { filter: grayscale(1); }
+  .card.done .thumb.photo img.fond { filter: blur(22px) grayscale(1); }
   .done-badge { font-size: .75rem; padding: 3px 9px; border-radius: 999px; font-weight: 600; white-space: nowrap; background: #e6efe9; color: var(--green); }
   .mention { font-size: .85rem; font-style: italic; color: var(--muted); text-align: right; max-width: 60%; }
   .thumb { cursor: zoom-in; }
@@ -588,6 +595,17 @@ function renderBudgets() {
   budgetsEl.querySelectorAll(".chip").forEach(x => x.onclick = () => { budget = x.dataset.b; render(); });
 }
 
+// Si la photo a presque la même forme que le cadre, on la laisse remplir le cadre (léger recadrage).
+// Sinon on l'affiche en entier, avec la même photo floutée derrière pour combler les côtés.
+function ajusterPhoto(img) {
+  const cadre = img.parentNode;
+  if (!img.naturalWidth || !cadre.offsetWidth) return;
+  const ecart = Math.abs(Math.log((img.naturalWidth / img.naturalHeight) / (cadre.offsetWidth / cadre.offsetHeight)));
+  const plein = ecart < Math.log(1.3);
+  img.classList.toggle("plein", plein);
+  cadre.classList.toggle("plein", plein);
+}
+
 const grid = document.getElementById("grid");
 const chips = document.getElementById("chips");
 const sortSel = document.getElementById("sort");
@@ -622,7 +640,7 @@ function render() {
   grid.innerHTML = list.map((c, idx) => {
     const prio = c.priorite;
     const thumb = c.image
-      ? `<div class="thumb photo"><img src="${esc(c.image)}" alt="${esc(c.nom)}" loading="lazy" referrerpolicy="no-referrer" onerror="this.parentNode.textContent='${esc(c.emoji || "🎁")}';this.parentNode.classList.remove('photo')"></div>`
+      ? `<div class="thumb photo"><img class="fond" src="${esc(c.image)}" alt="" aria-hidden="true" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()"><img class="net" src="${esc(c.image)}" alt="${esc(c.nom)}" loading="lazy" referrerpolicy="no-referrer" onload="ajusterPhoto(this)" onerror="this.parentNode.textContent='${esc(c.emoji || "🎁")}';this.parentNode.classList.remove('photo')"></div>`
       : `<div class="thumb">${esc(c.emoji || "🎁")}</div>`;
     const prix = (typeof c.prix === "number" && !c.achete)
       ? `<span class="price">≈ ${c.prix.toLocaleString("fr-FR", Number.isInteger(c.prix) ? {} : { minimumFractionDigits: 2, maximumFractionDigits: 2 })} €</span>`
