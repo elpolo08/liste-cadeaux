@@ -165,6 +165,8 @@
   .card.done { opacity: .55; }
   .card.done:hover { transform: none; box-shadow: none; }
   .card.done .thumb.photo img { filter: grayscale(1); }
+  .nb-photos { position: absolute; right: 8px; bottom: 8px; z-index: 1; background: rgba(20,28,24,.6); color: #fff;
+    font-size: .72rem; padding: 2px 8px; border-radius: 999px; pointer-events: none; }
   .coeur-badge { font-size: .75rem; padding: 3px 9px; border-radius: 999px; font-weight: 600; white-space: nowrap;
     background: #fbe4e2; color: var(--red); }
   .card.coeur { border-color: #eab6b1; box-shadow: 0 0 0 1px #f3d2ce inset; }
@@ -185,6 +187,14 @@
   .modal-body .price { font-size: 1.3rem; }
   .modal-body .links { justify-content: flex-start; }
   .modal-body .mention { text-align: left; max-width: none; }
+  .modal-img { position: relative; }
+  .gal-nav { position: absolute; top: 50%; transform: translateY(-50%); width: 38px; height: 38px; border-radius: 50%;
+    border: 1px solid var(--line); background: rgba(255,255,255,.92); color: var(--ink); font-size: 1.6rem; line-height: 1;
+    cursor: pointer; z-index: 2; display: flex; align-items: center; justify-content: center; padding: 0 0 3px; }
+  .gal-prev { left: 10px; } .gal-next { right: 10px; }
+  .gal-dots { position: absolute; left: 0; right: 0; bottom: 10px; display: flex; justify-content: center; gap: 7px; z-index: 2; }
+  .gal-dot { width: 8px; height: 8px; border-radius: 50%; border: 0; padding: 0; background: rgba(30,42,36,.25); cursor: pointer; }
+  .gal-dot.on { background: var(--green); }
   .modal-close { position: absolute; top: 10px; right: 10px; width: 36px; height: 36px; border-radius: 50%; border: 1px solid var(--line);
     background: #fff; font-size: 1.3rem; line-height: 1; cursor: pointer; color: var(--ink); z-index: 1; }
   .modal-box.done .modal-img img { filter: grayscale(1); opacity: .7; }
@@ -532,6 +542,7 @@ function lignesVersCadeaux(rows) {
       prix,
       liens,
       image: get(r, "image"),
+      images: [get(r, "image"), get(r, "image2"), get(r, "image3"), get(r, "image4")].filter(Boolean),
       entier: /^(entier|entière|entiere|contenir|contain|sans zoom|pas de zoom|non)$/i.test(get(r, "affichage_image")),
       emoji: get(r, "emoji"),
       achete: /^(oui|yes|x|1|true|vrai)$/i.test(get(r, "deja_achete")),
@@ -629,7 +640,7 @@ function render() {
   grid.innerHTML = list.map((c, idx) => {
     const prio = c.priorite;
     const thumb = c.image
-      ? `<div class="thumb photo${c.entier ? " entier" : ""}"><img src="${esc(c.image)}" alt="${esc(c.nom)}" loading="lazy" referrerpolicy="no-referrer" onerror="this.parentNode.textContent='${esc(c.emoji || "🎁")}';this.parentNode.classList.remove('photo')"></div>`
+      ? `<div class="thumb photo${c.entier ? " entier" : ""}"><img src="${esc(c.image)}" alt="${esc(c.nom)}" loading="lazy" referrerpolicy="no-referrer" onerror="this.parentNode.textContent='${esc(c.emoji || "🎁")}';this.parentNode.classList.remove('photo')">${c.images && c.images.length > 1 ? `<span class="nb-photos">📷 ${c.images.length}</span>` : ""}</div>`
       : `<div class="thumb">${esc(c.emoji || "🎁")}</div>`;
     const prix = (typeof c.prix === "number" && !c.achete)
       ? `<span class="price">≈ ${c.prix.toLocaleString("fr-FR", Number.isInteger(c.prix) ? {} : { minimumFractionDigits: 2, maximumFractionDigits: 2 })} €</span>`
@@ -668,8 +679,14 @@ function ouvrir(c) {
   const actions = c.achete ? `<span class="done-badge">✓ Déjà acheté</span>`
     : c.mention ? `<span class="mention">${esc(c.mention)}</span>`
     : liens.length ? `<div class="links">${liens.map(l => `<a class="btn" href="${esc(l.url)}" target="_blank" rel="noopener">${esc(l.texte || "Voir")}</a>`).join("")}</div>` : "";
-  const img = c.image
-    ? `<img src="${esc(c.image)}" alt="${esc(c.nom)}" referrerpolicy="no-referrer" onerror="this.parentNode.textContent='${esc(c.emoji || "🎁")}'">`
+  galerie = (c.images && c.images.length ? c.images : (c.image ? [c.image] : []));
+  galerieIdx = 0;
+  const plusieurs = galerie.length > 1;
+  const img = galerie.length
+    ? `<img id="galImg" src="${esc(galerie[0])}" alt="${esc(c.nom)}" referrerpolicy="no-referrer">` +
+      (plusieurs ? `<button class="gal-nav gal-prev" aria-label="Photo précédente">‹</button>
+        <button class="gal-nav gal-next" aria-label="Photo suivante">›</button>
+        <div class="gal-dots">${galerie.map((_, i) => `<button class="gal-dot${i === 0 ? " on" : ""}" data-i="${i}" aria-label="Photo ${i + 1}"></button>`).join("")}</div>` : "")
     : esc(c.emoji || "🎁");
   const p = prixTexte(c);
   modalBox.className = "modal-box" + (c.achete ? " done" : "");
@@ -684,9 +701,31 @@ function ouvrir(c) {
       ${actions}
     </div>`;
   modalBox.querySelector(".modal-close").onclick = fermer;
+  if (plusieurs) {
+    modalBox.querySelector(".gal-prev").onclick = () => voirPhoto(galerieIdx - 1);
+    modalBox.querySelector(".gal-next").onclick = () => voirPhoto(galerieIdx + 1);
+    modalBox.querySelectorAll(".gal-dot").forEach(d => d.onclick = () => voirPhoto(Number(d.dataset.i)));
+    const zone = modalBox.querySelector(".modal-img");
+    let x0 = null;
+    zone.addEventListener("touchstart", e => { x0 = e.touches[0].clientX; }, { passive: true });
+    zone.addEventListener("touchend", e => {
+      if (x0 === null) return;
+      const dx = e.changedTouches[0].clientX - x0; x0 = null;
+      if (Math.abs(dx) > 40) voirPhoto(galerieIdx + (dx < 0 ? 1 : -1));
+    });
+  }
   modal.classList.add("open");
   modal.setAttribute("aria-hidden", "false");
   document.body.style.overflow = "hidden";
+}
+
+let galerie = [], galerieIdx = 0;
+function voirPhoto(i) {
+  if (galerie.length < 2) return;
+  galerieIdx = (i + galerie.length) % galerie.length;
+  const im = document.getElementById("galImg");
+  if (im) im.src = galerie[galerieIdx];
+  modalBox.querySelectorAll(".gal-dot").forEach((d, k) => d.classList.toggle("on", k === galerieIdx));
 }
 
 function fermer() {
@@ -703,7 +742,12 @@ grid.addEventListener("click", e => {
   if (c) ouvrir(c);
 });
 modal.addEventListener("click", e => { if (e.target === modal) fermer(); });
-document.addEventListener("keydown", e => { if (e.key === "Escape") fermer(); });
+document.addEventListener("keydown", e => {
+  if (e.key === "Escape") fermer();
+  if (!modal.classList.contains("open")) return;
+  if (e.key === "ArrowRight") voirPhoto(galerieIdx + 1);
+  if (e.key === "ArrowLeft") voirPhoto(galerieIdx - 1);
+});
 
 sortSel.onchange = render;
 grid.innerHTML = `<p class="empty">Chargement de la liste…</p>`;
