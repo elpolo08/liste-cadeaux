@@ -136,7 +136,7 @@
   /* Photo entière au centre + même photo floutée en fond : pas de bandes vides, pas de zoom excessif */
   .thumb.photo img { position: absolute; display: block; }
   .thumb.photo img.fond { inset: -24px; width: calc(100% + 48px); height: calc(100% + 48px); object-fit: cover;
-    filter: blur(22px) saturate(1.15); opacity: .85; }
+    filter: blur(30px) saturate(1.1); opacity: .6; }
   .thumb.photo img.net { inset: 0; width: 100%; height: 100%; object-fit: contain; }
   .thumb.photo img.net.plein { object-fit: cover; }
   .thumb.photo.plein img.fond { display: none; }
@@ -169,7 +169,7 @@
   .card.done { opacity: .55; }
   .card.done:hover { transform: none; box-shadow: none; }
   .card.done .thumb.photo img.net { filter: grayscale(1); }
-  .card.done .thumb.photo img.fond { filter: blur(22px) grayscale(1); }
+  .card.done .thumb.photo img.fond { filter: blur(30px) grayscale(1); }
   .done-badge { font-size: .75rem; padding: 3px 9px; border-radius: 999px; font-weight: 600; white-space: nowrap; background: #e6efe9; color: var(--green); }
   .mention { font-size: .85rem; font-style: italic; color: var(--muted); text-align: right; max-width: 60%; }
   .thumb { cursor: zoom-in; }
