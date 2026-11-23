@@ -676,9 +676,9 @@ function prixTexte(c) {
 
 function ouvrir(c) {
   const liens = Array.isArray(c.liens) ? c.liens : (c.lien ? [{ texte: "Voir", url: c.lien }] : []);
+  const boutons = liens.length ? `<div class="links">${liens.map(l => `<a class="btn" href="${esc(l.url)}" target="_blank" rel="noopener">${esc(l.texte || "Voir")}</a>`).join("")}</div>` : "";
   const actions = c.achete ? `<span class="done-badge">✓ Déjà acheté</span>`
-    : c.mention ? `<span class="mention">${esc(c.mention)}</span>`
-    : liens.length ? `<div class="links">${liens.map(l => `<a class="btn" href="${esc(l.url)}" target="_blank" rel="noopener">${esc(l.texte || "Voir")}</a>`).join("")}</div>` : "";
+    : (c.mention ? `<span class="mention">${esc(c.mention)}</span>` : "") + boutons;
   galerie = (c.images && c.images.length ? c.images : (c.image ? [c.image] : []));
   galerieIdx = 0;
   const plusieurs = galerie.length > 1;
